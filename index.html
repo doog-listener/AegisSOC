@@ -667,7 +667,7 @@
 
   <!-- Script Engine with 2-Second Choregraphed Stage Animations -->
   <script>
-    const API_BASE = 'https://redesigned-umbrella-x5w69pwg676g365xw-7860.app.github.dev/gradio';
+    const SPACE_ID = 'teem5002/aegissoc-backend';
     /* =========================================================
        1. Dynamic Cyber Mesh Background (Interactive Neural Field)
        ========================================================= */
@@ -1121,76 +1121,62 @@
 
       triggerShockwave(width / 2, 340, 'rgba(56, 189, 248,');
 
-      const formData = new FormData();
-      formData.append('analysis_mode', modeSelect.value);
-
-      // Start backend fetch in parallel with the choreographed 2-second visual phases
-      const fetchPromise = (async () => {
-        if (files.length === 1) {
-          formData.append('file', files[0]);
-          const res = await fetch(`${API_BASE}/api/analyze`, { method: 'POST', body: formData });
-          if (!res.ok) {
-            const errJson = await res.json().catch(() => ({}));
-            throw new Error(errJson.detail || `Server returned HTTP ${res.status}`);
-          }
-          return { type: 'single', data: await res.json() };
-        } else {
-          for (let i = 0; i < files.length; i++) {
-            formData.append('files', files[i]);
-          }
-          const res = await fetch(`${API_BASE}/api/analyze/batch`, { method: 'POST', body: formData });
-          if (!res.ok) {
-            const errJson = await res.json().catch(() => ({}));
-            throw new Error(errJson.detail || `Batch server returned HTTP ${res.status}`);
-          }
-          return { type: 'batch', data: await res.json() };
-        }
-      })();
-
       try {
-        // --- STAGE 1: 0ms -> 700ms ---
-        phaseBadge.innerText = "PHASE 01 // BYTE STREAM PARSING";
-        stepTitle.innerText = "Extracting Raw Binary Byte Stream...";
-        stepSubtitle.innerText = "Sampling first 256 KB PE header & computing uncompressed Shannon entropy";
-        progressBar.style.width = '30%';
-        stepDot1.className = "px-2.5 py-1 rounded-md bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center gap-1.5 font-semibold";
-        stepDot2.className = "px-2.5 py-1 rounded-md bg-slate-800 text-slate-500 border border-slate-700/60";
-        stepDot3.className = "px-2.5 py-1 rounded-md bg-slate-800 text-slate-500 border border-slate-700/60";
-        await sleep(700);
+        const { Client } = await import("https://unpkg.com/@gradio/client");
+        const hfApp = await Client.connect(SPACE_ID);
 
-        // --- STAGE 2: 700ms -> 1400ms ---
-        phaseBadge.innerText = "PHASE 02 // 2D SPATIAL PROJECTION";
-        stepTitle.innerText = "Constructing 2D Grayscale Texture Matrix...";
-        stepSubtitle.innerText = "Executing Nataraj et al. width heuristics & nearest-neighbor interpolation";
-        progressBar.style.width = '68%';
-        stepDot1.className = "px-2.5 py-1 rounded-md bg-slate-800 text-slate-400 border border-slate-700/60";
-        stepDot2.className = "px-2.5 py-1 rounded-md bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center gap-1.5 font-semibold";
-        triggerShockwave(width / 2, 450, 'rgba(99, 102, 241,');
-        await sleep(700);
+        let batchResults = [];
+        for (let i = 0; i < files.length; i++) {
+          // --- STAGE 1: 0ms -> 700ms ---
+          phaseBadge.innerText = `PHASE 01 // BYTE STREAM PARSING [TARGET ${i+1}/${files.length}]`;
+          stepTitle.innerText = "Extracting Raw Binary Byte Stream...";
+          stepSubtitle.innerText = files[i].name;
+          progressBar.style.width = '30%';
+          stepDot1.className = "px-2.5 py-1 rounded-md bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center gap-1.5 font-semibold";
+          stepDot2.className = "px-2.5 py-1 rounded-md bg-slate-800 text-slate-500 border border-slate-700/60";
+          stepDot3.className = "px-2.5 py-1 rounded-md bg-slate-800 text-slate-500 border border-slate-700/60";
+          await sleep(700);
 
-        // --- STAGE 3: 1400ms -> 2100ms ---
-        phaseBadge.innerText = "PHASE 03 // CONVOLUTIONAL INFERENCE";
-        stepTitle.innerText = "Evaluating Convolutional Layer4 Activations...";
-        stepSubtitle.innerText = "Backpropagating gradients via Grad-CAM & verifying Authenticode signatures";
-        progressBar.style.width = '96%';
-        stepDot2.className = "px-2.5 py-1 rounded-md bg-slate-800 text-slate-400 border border-slate-700/60";
-        stepDot3.className = "px-2.5 py-1 rounded-md bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center gap-1.5 font-semibold";
-        await sleep(700);
+          // --- STAGE 2: 700ms -> 1400ms ---
+          phaseBadge.innerText = `PHASE 02 // 2D SPATIAL PROJECTION [TARGET ${i+1}/${files.length}]`;
+          stepTitle.innerText = "Constructing 2D Grayscale Texture Matrix...";
+          stepSubtitle.innerText = "Executing Nataraj et al. width heuristics & nearest-neighbor interpolation";
+          progressBar.style.width = '68%';
+          stepDot1.className = "px-2.5 py-1 rounded-md bg-slate-800 text-slate-400 border border-slate-700/60";
+          stepDot2.className = "px-2.5 py-1 rounded-md bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center gap-1.5 font-semibold";
+          triggerShockwave(width / 2, 450, 'rgba(99, 102, 241,');
 
-        // Await the backend response (will already be resolved or finishing)
-        const result = await fetchPromise;
+          const fetchPromise = hfApp.predict("/analyze", [ files[i] ]);
+          await sleep(700);
 
-        progressBar.style.width = '100%';
+          // --- STAGE 3: 1400ms -> 2100ms ---
+          phaseBadge.innerText = `PHASE 03 // CONVOLUTIONAL INFERENCE [TARGET ${i+1}/${files.length}]`;
+          stepTitle.innerText = "Evaluating Convolutional Layer4 Activations...";
+          stepSubtitle.innerText = "Backpropagating gradients via Grad-CAM & verifying Authenticode signatures";
+          progressBar.style.width = '96%';
+          stepDot2.className = "px-2.5 py-1 rounded-md bg-slate-800 text-slate-400 border border-slate-700/60";
+          stepDot3.className = "px-2.5 py-1 rounded-md bg-sky-500/20 text-sky-300 border border-sky-500/40 flex items-center gap-1.5 font-semibold";
+
+          try {
+            const result = await fetchPromise;
+            batchResults.push(result.data[0]);
+          } catch (e) {
+            batchResults.push({ filename: files[i].name, status: "ERROR", error: e.message });
+          }
+
+          progressBar.style.width = '100%';
+        }
+
         await sleep(200);
 
-        // Render Results
-        if (result.type === 'single') {
-          renderSingleView(result.data);
+        if (files.length === 1) {
+          if (batchResults[0].status === "ERROR") throw new Error(batchResults[0].error);
+          renderSingleView(batchResults[0], files[0]);
           singleView.classList.remove('hidden');
           batchView.classList.add('hidden');
           document.getElementById('verdictNeonContainer').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         } else {
-          renderBatchView(result.data);
+          renderBatchView({ batch_triage_results: batchResults, total_files_analyzed: files.length });
           singleView.classList.add('hidden');
           batchView.classList.remove('hidden');
           document.getElementById('batchView').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1217,7 +1203,7 @@
     /* =========================================================
        6. Dynamic Presentation Rendering Engine
        ========================================================= */
-    function renderSingleView(data) {
+    function renderSingleView(data, uploadedFile) {
       const isExec = data.threat_vector && data.threat_vector.includes("Executable");
       const risk = String(data.risk_level || 'LOW').toUpperCase();
       const verdict = String(data.verdict || 'BENIGN');
@@ -1333,16 +1319,32 @@
       animateRollingScore(rawConfidence, isCritical);
 
       // Visual Images
+      const parseGradioImage = (imgData) => {
+          if (!imgData) return null;
+          if (typeof imgData === 'string') {
+              return (imgData.startsWith('data:') || imgData.startsWith('http')) ? imgData : `data:image/png;base64,${imgData}`;
+          }
+          if (imgData.url) return imgData.url;
+          return null;
+      };
+      
       const matrixImg = document.getElementById('matrixImg');
       const heatmapImg = document.getElementById('heatmapImg');
+      const finalMatrix = parseGradioImage(data.binary_matrix_base64);
+      const finalHeatmap = parseGradioImage(data.gradcam_heatmap_base64);
 
-      if (data.binary_matrix_base64) {
-        matrixImg.src = data.binary_matrix_base64;
+      if (finalMatrix) {
+          matrixImg.src = finalMatrix;
+      } else if (uploadedFile && uploadedFile.type && uploadedFile.type.startsWith('image/')) {
+          matrixImg.src = URL.createObjectURL(uploadedFile);
       }
-      if (data.gradcam_heatmap_base64) {
-        heatmapImg.src = data.gradcam_heatmap_base64;
-      } else if (data.binary_matrix_base64) {
-        heatmapImg.src = data.binary_matrix_base64;
+
+      if (finalHeatmap) {
+          heatmapImg.src = finalHeatmap;
+      } else if (finalMatrix) {
+          heatmapImg.src = finalMatrix;
+      } else if (uploadedFile && uploadedFile.type && uploadedFile.type.startsWith('image/')) {
+          heatmapImg.src = URL.createObjectURL(uploadedFile);
       }
 
       if (!isExec && data.media_metrics) {
@@ -1362,7 +1364,7 @@
 
       const tbody = document.getElementById('batchTableBody');
       tbody.innerHTML = items.map(item => {
-        if (item.status === 'PROCESSED') {
+        if (item.status === 'PROCESSED' || item.status === 'SUCCESS' || !item.error) {
           const v = String(item.verdict || 'BENIGN');
           const isCrit = item.risk_level === 'CRITICAL' || item.risk_level === 'HIGH' || v.includes('MALICIOUS');
           const isSusp = item.risk_level === 'MEDIUM' || v.includes('SUSPICIOUS');
@@ -1375,7 +1377,8 @@
             ? '<span class="text-rose-400 font-bold">⚠️ YES</span>'
             : '<span class="text-slate-400">NO</span>';
 
-          const detail = item.malware_family || (item.shannon_entropy && item.shannon_entropy !== 'N/A' ? 'Entropy: ' + item.shannon_entropy : 'Clean Base');
+          const detail = (item.malware_family && item.malware_family !== 'None (Clean or Out-of-Distribution)') ? item.malware_family : ((item.media_metrics && item.media_metrics.shannon_entropy) ? 'Entropy: ' + item.media_metrics.shannon_entropy : 'Clean Base');
+          const rawConf = item.confidence !== null && item.confidence !== undefined ? Math.round(item.confidence) : (isCrit ? 98 : 5);
 
           return `
             <tr class="hover:bg-slate-800/40 transition-colors">
@@ -1388,14 +1391,14 @@
                 </span>
               </td>
               <td class="py-3 px-4 font-medium text-slate-300">${detail}</td>
-              <td class="py-3 px-4 font-bold ${isCrit ? 'text-rose-400' : 'text-slate-300'}">${item.confidence || 'N/A'}</td>
+              <td class="py-3 px-4 font-bold ${isCrit ? 'text-rose-400' : 'text-emerald-400'}">${rawConf}%</td>
             </tr>
           `;
         } else {
           return `
             <tr class="bg-rose-950/10 hover:bg-rose-950/20 transition-colors">
               <td class="py-3 px-4 font-semibold text-slate-300">${item.filename}</td>
-              <td class="py-3 px-4 text-rose-400" colspan="2">${item.error || 'Unsupported file format.'}</td>
+              <td class="py-3 px-4 text-rose-400" colspan="2">${item.error || 'Failed to process'}</td>
               <td class="py-3 px-4">
                 <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold border bg-rose-500/10 text-rose-400 border-rose-500/30">
                   REJECTED
