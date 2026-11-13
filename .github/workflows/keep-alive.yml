@@ -1,0 +1,19 @@
+name: Keep Hugging Face Backend Awake
+
+on:
+  schedule:
+    # Runs every 12 hours at 00:00 and 12:00 UTC
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping FastAPI Health Endpoint
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://teem5002-aegissoc-backend.hf.space/docs)
+          echo "HTTP Status: $STATUS"
+          if [ "$STATUS" -ne 200 ]; then
+            exit 1
+          fi
