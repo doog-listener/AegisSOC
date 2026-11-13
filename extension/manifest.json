@@ -1,1 +1,43 @@
-
+{
+  "manifest_version": 3,
+  "name": "AegisSOC Edge Interceptor",
+  "version": "2.4.0",
+  "description": "Zero-execution neural binary (ResNet-50 + Grad-CAM) & steganography triage for WhatsApp Web and Gmail attachments.",
+  "permissions": [
+    "downloads",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://web.whatsapp.com/*",
+    "https://mail.google.com/*",
+    "https://*.googleusercontent.com/*",
+    "https://teem5002-aegissoc-backend.hf.space/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://web.whatsapp.com/*",
+        "https://mail.google.com/*"
+      ],
+      "js": [
+        "injector.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://web.whatsapp.com/*",
+        "https://mail.google.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
