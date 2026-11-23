@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy | AegisSOC Edge Interceptor</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at top, #0a1226 0%, #030712 65%);
+      color: #e2e8f0;
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+    .wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 24px 72px;
+    }
+    .card {
+      background: rgba(13, 21, 39, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 18px;
+      padding: 36px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      margin-bottom: 14px;
+    }
+    h1 { margin: 0 0 8px; font-size: 28px; color: #ffffff; }
+    .meta { color: #94a3b8; font-size: 13px; margin-bottom: 28px; }
+    h2 { color: #38bdf8; font-size: 18px; margin-top: 28px; margin-bottom: 10px; }
+    p, li { color: #cbd5e1; font-size: 15px; }
+    ul { padding-left: 20px; }
+    code {
+      background: #020617;
+      color: #7dd3fc;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    a { color: #38bdf8; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back { display: inline-block; margin-top: 28px; font-weight: 600; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <span class="badge">AegisSOC Security</span>
+      <h1>Privacy Policy — AegisSOC Edge Interceptor</h1>
+      <p class="meta">Effective Date: November 24, 2026 &bull; Applies to AegisSOC Edge Interceptor (v2.6.1+) &amp; Executive Console</p>
+
+      <h2>1. Data Accessed During Attachment Inspection</h2>
+      <p>
+        AegisSOC Edge Interceptor only inspects attachments when you click to preview or download a file on
+        <code>web.whatsapp.com</code> or <code>mail.google.com</code>, or when you explicitly select a file in the
+        manual triage drop zone:
+      </p>
+      <ul>
+        <li><strong>PDF Documents (.pdf):</strong> Structural inspection for active exploit triggers (<code>/JavaScript</code>, <code>/Launch</code>, <code>/OpenAction</code>, <code>/EmbeddedFile</code>) runs locally inside your browser. Only if a disguised or embedded Windows PE executable is detected inside the PDF is that binary slice sent for neural analysis.</li>
+        <li><strong>PE Executables &amp; Raster Images (.exe, .dll, .png, .jpg):</strong> Up to the first 256 KB header slice (or full file up to 4 MB) is transmitted securely over HTTPS to our inference endpoint (<code>teem5002-aegissoc-backend.hf.space</code>) solely to compute malware classification and Shannon entropy scores.</li>
+      </ul>
+
+      <h2>2. Zero Data Retention &amp; No Tracking</h2>
+      <p>
+        All inspected file buffers are processed strictly in volatile memory during real-time triage and discarded immediately after returning the JSON verdict. AegisSOC does <strong>not</strong> log, store to disk, sell, profile, or share your files, emails, chat messages, contacts, credentials, or browsing history with any third party.
+      </p>
+
+      <h2>3. Local Session Caching</h2>
+      <p>
+        To prevent duplicate scans between opening a preview and downloading the same attachment, SHA-256 hashes and scan verdicts are cached temporarily inside your local browser session memory. Widget drag coordinates are stored locally in your browser's <code>localStorage</code>.
+      </p>
+
+      <h2>4. Permissions Transparency</h2>
+      <ul>
+        <li><code>downloads</code>: Holds unverified Gmail attachment downloads until security inspection completes.</li>
+        <li><code>storage</code>: Stores local UI preferences and extension state.</li>
+        <li><code>tabs</code>: Sends real-time scan notifications to the active Gmail tab HUD.</li>
+      </ul>
+
+      <h2>5. Contact &amp; Source Verification</h2>
+      <p>
+        AegisSOC is open-source. For privacy questions or security reports, visit
+        <a href="https://github.com/doog-listener/aegissoc" target="_blank" rel="noopener noreferrer">github.com/doog-listener/aegissoc</a>.
+      </p>
+
+      <a class="back" href="./index.html">&larr; Back to AegisSOC Executive Console</a>
+    </div>
+  </div>
+</body>
+</html>

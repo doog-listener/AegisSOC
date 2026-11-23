@@ -3,6 +3,14 @@
     {
       "src": "index.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "privacy.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "aegissoc-edge-v2.6.1.zip",
+      "use": "@vercel/static"
     }
   ]
 }
