@@ -38,76 +38,6 @@
       }
     };
 
-    /* =========================================================
-       7. Chrome Extension Installer & Live Status Handshake
-       ========================================================= */
-    const EXTENSION_ZIP_PATH = './aegissoc-edge-interceptor.zip';
-
-    function openInstallModal(downloadStarted = true) {
-      const notice = document.getElementById('downloadStatusNotice');
-      if (downloadStarted) {
-        notice.classList.remove('hidden');
-      } else {
-        notice.classList.add('hidden');
-      }
-      document.getElementById('extInstallModal').classList.remove('hidden');
-    }
-
-    function closeInstallModal() {
-      document.getElementById('extInstallModal').classList.add('hidden');
-    }
-
-    function triggerExtensionInstall() {
-      const link = document.createElement('a');
-      link.href = EXTENSION_ZIP_PATH;
-      link.download = 'aegissoc-edge-interceptor.zip';
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      openInstallModal(true);
-    }
-
-    function copyExtUrl(urlText, btnEl) {
-      navigator.clipboard.writeText(urlText).then(() => {
-        const span = btnEl.querySelector('span:last-child');
-        const original = span.innerText;
-        span.innerText = 'Copied! Paste in address bar';
-        setTimeout(() => { span.innerText = original; }, 2200);
-      });
-    }
-
-    function markExtensionInstalled(version = '2.6') {
-      const headerBtn = document.getElementById('installExtBtn');
-      const headerIcon = document.getElementById('installExtIcon');
-      const headerLabel = document.getElementById('installExtLabel');
-      if (headerBtn) {
-        headerBtn.className = "px-3.5 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs font-semibold tracking-wide flex items-center gap-2 cursor-pointer";
-        headerIcon.innerText = "verified";
-        headerLabel.innerText = `Shield Active (v${version})`;
-      }
-
-      const bannerBadge = document.getElementById('bannerShieldBadge');
-      const bannerTitle = document.getElementById('bannerShieldTitle');
-      const bannerDesc = document.getElementById('bannerShieldDesc');
-      const bannerBtn = document.getElementById('bannerInstallBtn');
-      if (bannerBadge) {
-        bannerBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
-        bannerBadge.innerText = `CONNECTED • v${version}`;
-        bannerTitle.innerText = "AegisSOC Browser Shield is Active on This Device";
-        bannerDesc.innerText = "WhatsApp Web and Gmail attachments are actively protected against malware, spoofed PDFs, and stego payloads.";
-        bannerBtn.innerHTML = '<span class="material-symbols-outlined text-[17px]">check_circle</span><span>Installed</span>';
-        bannerBtn.className = "px-4 py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold flex items-center gap-1.5 cursor-pointer";
-      }
-    }
-
-    window.addEventListener('AEGISSOC_EXTENSION_READY', (e) => {
-      const ver = (e.detail && e.detail.version) || '2.6';
-      markExtensionInstalled(ver);
-    });
-
-    if (document.documentElement.dataset.aegissocInstalled) {
-      markExtensionInstalled(document.documentElement.dataset.aegissocInstalled);
-    }
   </script>
   <style>
     @layer base {
@@ -355,11 +285,11 @@
         <button id="installExtBtn" onclick="triggerExtensionInstall()" type="button"
           class="px-3.5 py-2 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-400/50 text-sky-300 hover:text-white text-xs font-semibold tracking-wide flex items-center gap-2 transition-all shadow-[0_0_16px_rgba(56,189,248,0.2)] cursor-pointer">
           <span class="material-symbols-outlined text-[17px]" id="installExtIcon">extension</span>
-          <span id="installExtLabel">Add to Chrome</span>
+          <span id="installExtLabel">Add to Edge / Chrome</span>
         </button>
         <div class="hidden md:flex flex-col text-right">
           <span class="text-xs font-medium text-slate-200">Executive Console</span>
-          <span class="text-[11px] text-slate-400 font-mono">SOC Node 01 • v2.6</span>
+          <span class="text-[11px] text-slate-400 font-mono">SOC Node 01 • v2.6.1</span>
         </div>
       </div>
     </div>
@@ -437,7 +367,7 @@
         <div>
           <div class="flex items-center gap-2">
             <h3 class="text-sm font-semibold text-white" id="bannerShieldTitle">Protect WhatsApp Web &amp; Gmail in Real Time</h3>
-            <span id="bannerShieldBadge" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-sky-500/15 text-sky-300 border border-sky-500/30">MV3 Extension v2.6</span>
+            <span id="bannerShieldBadge" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-sky-500/15 text-sky-300 border border-sky-500/30">MV3 Shield v2.6.1</span>
           </div>
           <p class="text-xs text-slate-400 mt-0.5" id="bannerShieldDesc">
             Intercepts incoming executables, weaponized PDFs, and stego images before they reach your disk.
@@ -452,7 +382,7 @@
         <button id="bannerInstallBtn" onclick="triggerExtensionInstall()" type="button"
           class="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 active:scale-95 text-slate-950 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-[0_0_16px_rgba(56,189,248,0.3)] cursor-pointer">
           <span class="material-symbols-outlined text-[17px]">download</span>
-          <span>Add to Chrome</span>
+          <span>Add to Edge / Chrome</span>
         </button>
       </div>
     </section>
@@ -772,7 +702,7 @@
           </div>
           <div>
             <h3 class="text-base font-bold text-white">Install AegisSOC Edge Interceptor</h3>
-            <p class="text-xs text-slate-400 font-mono">Chrome &amp; Brave Manifest V3 Package (v2.6)</p>
+            <p class="text-xs text-slate-400 font-mono">Edge, Chrome &amp; Brave Manifest V3 Package (v2.6.1)</p>
           </div>
         </div>
         <button onclick="closeInstallModal()" type="button" class="text-slate-400 hover:text-white p-1 cursor-pointer">
@@ -782,7 +712,7 @@
 
       <div id="downloadStatusNotice" class="rounded-xl bg-emerald-500/10 border border-emerald-500/30 p-3.5 flex items-center gap-3 text-xs text-emerald-300">
         <span class="material-symbols-outlined text-[20px] shrink-0">check_circle</span>
-        <span><strong>aegissoc-edge-interceptor.zip</strong> download started! Follow the 3 steps below to activate protection:</span>
+        <span><strong>aegissoc-edge-v2.6.1.zip</strong> download started! Follow the 3 steps below to activate protection:</span>
       </div>
 
       <ol class="space-y-3.5 text-xs text-slate-300">
@@ -790,7 +720,7 @@
           <span class="w-6 h-6 rounded-lg bg-sky-500/20 text-sky-300 font-mono font-bold flex items-center justify-center shrink-0">1</span>
           <div class="space-y-1">
             <p class="font-semibold text-white">Extract the ZIP Archive</p>
-            <p class="text-slate-400">Unzip <code class="text-sky-300 font-mono">aegissoc-edge-interceptor.zip</code> into a permanent folder (e.g., <code class="text-slate-200 font-mono">C:\AegisSOC\extension</code>).</p>
+            <p class="text-slate-400">Unzip <code class="text-sky-300 font-mono">aegissoc-edge-v2.6.1.zip</code> into a permanent folder (e.g., <code class="text-slate-200 font-mono">D:\Extensions\AegisSOC</code>).</p>
           </div>
         </li>
 
@@ -800,6 +730,11 @@
             <p class="font-semibold text-white">Open Extensions &amp; Enable Developer Mode</p>
             <p class="text-slate-400">Paste the extensions URL into a new tab and toggle <strong>Developer mode</strong> ON (top right):</p>
             <div class="flex flex-wrap items-center gap-2 pt-1">
+              <button onclick="copyExtUrl('edge://extensions', this)" type="button"
+                class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 font-mono text-[11px] border border-slate-700 flex items-center gap-1.5 cursor-pointer">
+                <span class="material-symbols-outlined text-[14px]">content_copy</span>
+                <span>edge://extensions</span>
+              </button>
               <button onclick="copyExtUrl('chrome://extensions', this)" type="button"
                 class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-300 font-mono text-[11px] border border-slate-700 flex items-center gap-1.5 cursor-pointer">
                 <span class="material-symbols-outlined text-[14px]">content_copy</span>
@@ -824,7 +759,7 @@
       </ol>
 
       <div class="flex items-center justify-between pt-2 border-t border-slate-800">
-        <a href="./aegissoc-edge-interceptor.zip" download="aegissoc-edge-interceptor.zip"
+        <a href="./aegissoc-edge-v2.6.1.zip" download="aegissoc-edge-v2.6.1.zip"
           class="text-xs text-sky-400 hover:text-sky-300 underline underline-offset-4 font-medium">
           Download ZIP again
         </a>
@@ -838,7 +773,7 @@
 
   <footer
     class="w-full border-t border-slate-800/80 py-6 mt-16 text-center text-xs text-slate-400 font-mono relative z-10">
-    Multi-Vector Threat Detection Engine • Autonomous Executive Console
+    AegisSOC Multi-Vector Threat Detection Engine • <a href="./privacy.html" class="text-sky-400 hover:underline">Privacy Policy</a> • <a href="https://github.com/doog-listener/aegissoc" target="_blank" rel="noopener noreferrer" class="text-slate-300 hover:text-white hover:underline">GitHub</a>
   </footer>
 
   <!-- Script Engine with 2-Second Choregraphed Stage Animations -->
@@ -1599,6 +1534,87 @@
           `;
         }
       }).join('');
+    }
+
+    /* =========================================================
+       7. Edge Add-ons 1-Click Installer & Live Status Handshake
+       ========================================================= */
+    // AFTER Microsoft Edge approves your extension, paste your official store URL here:
+    // Example: 'https://microsoftedge.microsoft.com/addons/detail/aegissoc-edge-interceptor/YOUR_ID'
+    const EDGE_STORE_URL = '';
+    const EXTENSION_ZIP_PATH = './aegissoc-edge-v2.6.1.zip';
+
+    function openInstallModal(downloadStarted = true) {
+      const notice = document.getElementById('downloadStatusNotice');
+      if (notice) {
+        if (downloadStarted) notice.classList.remove('hidden');
+        else notice.classList.add('hidden');
+      }
+      const modal = document.getElementById('extInstallModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeInstallModal() {
+      const modal = document.getElementById('extInstallModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function triggerExtensionInstall() {
+      // If Microsoft Edge Add-ons Store URL is configured, open true 1-click store install page
+      if (EDGE_STORE_URL && EDGE_STORE_URL.startsWith('https://')) {
+        window.open(EDGE_STORE_URL, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      // Fallback before store approval: download verified ZIP hosted on Vercel
+      const link = document.createElement('a');
+      link.href = EXTENSION_ZIP_PATH;
+      link.download = 'aegissoc-edge-v2.6.1.zip';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      openInstallModal(true);
+    }
+
+    function copyExtUrl(urlText, btnEl) {
+      navigator.clipboard.writeText(urlText).then(() => {
+        const span = btnEl.querySelector('span:last-child');
+        const original = span.innerText;
+        span.innerText = 'Copied! Paste in address bar';
+        setTimeout(() => { span.innerText = original; }, 2200);
+      });
+    }
+
+    function markExtensionInstalled(version = '2.6.1') {
+      const headerBtn = document.getElementById('installExtBtn');
+      const headerIcon = document.getElementById('installExtIcon');
+      const headerLabel = document.getElementById('installExtLabel');
+      if (headerBtn) {
+        headerBtn.className = "px-3.5 py-2 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs font-semibold tracking-wide flex items-center gap-2 cursor-pointer";
+        headerIcon.innerText = "verified";
+        headerLabel.innerText = `Shield Active (v${version})`;
+      }
+
+      const bannerBadge = document.getElementById('bannerShieldBadge');
+      const bannerTitle = document.getElementById('bannerShieldTitle');
+      const bannerDesc = document.getElementById('bannerShieldDesc');
+      const bannerBtn = document.getElementById('bannerInstallBtn');
+      if (bannerBadge) {
+        bannerBadge.className = "px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+        bannerBadge.innerText = `CONNECTED • v${version}`;
+        bannerTitle.innerText = "AegisSOC Browser Shield is Active on This Device";
+        bannerDesc.innerText = "WhatsApp Web and Gmail attachments are actively protected against malware, spoofed PDFs, and stego payloads.";
+        bannerBtn.innerHTML = '<span class="material-symbols-outlined text-[17px]">check_circle</span><span>Installed</span>';
+        bannerBtn.className = "px-4 py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold flex items-center gap-1.5 cursor-pointer";
+      }
+    }
+
+    window.addEventListener('AEGISSOC_EXTENSION_READY', (e) => {
+      const ver = (e.detail && e.detail.version) || '2.6.1';
+      markExtensionInstalled(ver);
+    });
+
+    if (document.documentElement.dataset.aegissocInstalled) {
+      markExtensionInstalled(document.documentElement.dataset.aegissocInstalled);
     }
   </script>
 </body>
